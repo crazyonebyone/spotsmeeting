@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv=”Content-Type” content=”text/html; charset=utf-8″> 
+		<title></title>
+	</head>
+	<body>
+		<h1>学生运动会管理界面</h1>
+		<h2>场地管理</h2>
+		<?php
+　　　　　phpinfo()
+　　　　?>
+		<form action="#" method="post">
+			<input type="text" class="object" name="obj" value="sad" placeholder="请输入运动项目" />
+			<input type="text" class="position" name="posi" placeholder="请输入项目的场地位置" />
+			<input type="button" class="sub" value="提交"/>
+		</form>
+	</body>
+	<script src="js/jquery-3.1.0.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		function GetVal(OBJ,POSI){
+			this.obj = document.getElementsByClassName(OBJ)[0];
+			this.posi = document.getElementsByClassName(POSI)[0];
+			this.wheres={};
+		}
+		GetVal.prototype.getObj=function(){
+			return this.obj.value;
+		}
+		GetVal.prototype.getPosi=function(){
+			return this.posi.value;
+		}
+		GetVal.prototype.init=function(){
+			this.objVal = this.getObj();
+			this.posiVal = this.getPosi();
+//			console.log(this.objVal,this.posiVal)
+		}
+		var getval = new GetVal("object","position");
+//		console.log(getval.init())
+		function HoldVal(SUB,OBJ,POSI){
+			GetVal.call(this,OBJ,POSI);//将getval中的属性继承给HoldVal;
+			this.sub = document.getElementsByClassName(SUB)[0]
+		}
+		HoldVal.prototype=getval.__proto__;//将getval中的方法继承给HoldVal;
+		HoldVal.prototype.hold=function(){
+			var that = this;
+			this.sub.onclick = function(){//设置点击事件
+				that.init();//运行继承的init方法
+				that.wheres[that.objVal]=that.posiVal;
+				console.log(that.objVal);
+				$.ajax({
+					type:"post",
+					url:"phptest.php",
+					async:false,
+					data:{
+						obj:that.objVal,
+						posi:that.posiVal
+					},
+					dataType:"json",
+					cache:true,
+					success:function(data){
+						console.log("成功")
+						console.log(data);
+					},
+					error:function(msr){
+						console.log("错了！");
+					}
+				});
+//				var wheres=JSON.stringify(that.wheres);
+////				console.log(wheres);
+//				window.localStorage.setItem("where",wheres);
+////				console.log(that.objVal);
+		}
+		}
+		var hold =  new HoldVal("sub","object","position");
+		hold.hold();
+//		console.log(hold);
+	</script>
+</html>
