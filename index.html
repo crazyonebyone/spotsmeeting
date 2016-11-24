@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+	</head>
+	<body>
+		<form action="#" method="post">
+			<input type="text" class="searchField" placeholder="请输入你要查找场地的项目" />
+			<input type="button" class="sub" value="提交"/>
+		</form>
+		<div class="showField">
+			<p></p>
+			<ul></ul>
+		</div>
+		
+		
+	</body>
+	<script type="text/javascript">
+		function getField(){
+			this.sear = document.getElementsByClassName("searchField")[0];
+			this.sub  = document.getElementsByClassName("sub")[0];
+			this.showP = document.getElementsByClassName("showField")[0];
+			this.showinp = this.showP.children[0];
+			this.ul = this.showP.children[1];
+			this.isHave;
+		}
+		getField.prototype.getVal=function(){
+			return this.sear.value;
+		}
+		getField.prototype.search = function(){
+			var that = this;
+			this.sub.onclick=function(){
+				that.ul.innerHTML="";
+				var searVal = that.getVal();
+				that.showinp.innerHTML="正在搜索"+searVal;
+				that.sear.value="";
+				var where = window.localStorage.getItem("where");
+				where = JSON.parse(where);
+				console.log(where);
+				var li = document.createElement("li");
+				for(var key in where){
+					if(key == searVal){
+						li.innerHTML = searVal+"的场地位于"+where[searVal];
+						break;
+					}else{
+						li.innerHTML = "查无此项！";
+					}
+				}
+				that.ul.appendChild(li);
+			}
+		}
+		getField.prototype.init=function(){
+			this.search();
+		}
+		var getfield = new getField();
+		getfield.init();
+	</script>
+</html>
